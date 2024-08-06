@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.microservice.exception.InvalidDataException;
+import com.microservice.exception.NotFoundException;
 import com.microservice.model.Movie;
 import com.microservice.repo.MovieRepository;
 
@@ -17,7 +19,7 @@ public class MovieService {
 	
 	public Movie create(Movie movie) {
 		if(movie==null) {
-			throw new RuntimeException("Invalid movies");
+			throw new InvalidDataException("Invalid movies:null");
 		}
 		
 		return repo.save(movie);
@@ -31,12 +33,12 @@ public class MovieService {
 	
 	public Movie read(Long id) {
 		return repo.findById(id)
-				.orElseThrow(()-> new RuntimeException("Movie not found"));
+				.orElseThrow(()-> new NotFoundException("Movie not found:"+id));
 	}
 	
 	public void update(Long id,Movie updatemovie) {
 		if(updatemovie==null || id==null) {
-			throw new RuntimeException("Invalid Movies");
+			throw new InvalidDataException("Invalid Movies:null");
 		}
 		 if(repo.existsById(id)) {
 			 Movie movie=repo.getReferenceById(id);
@@ -47,7 +49,7 @@ public class MovieService {
 			
 		}
 		 else {
-			 throw new RuntimeException("movie not found");
+			 throw new NotFoundException("movie not found:"+id);
 		 }
 	}
 	
@@ -56,7 +58,7 @@ public class MovieService {
 			repo.deleteById(id);		
 			
 		}else {
-			throw new RuntimeException("movie not found");
+			throw new NotFoundException("movie not found:"+id);
 		}
 	}
 	

@@ -65,5 +65,5 @@ public class MovieController {
 		movieservice.delete(id);
 		log.info("deleted movie with id:{}",id);
 	}
-
+	
 }
